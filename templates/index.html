@@ -1,0 +1,36 @@
+<html>
+<head>
+    <style>
+        body {height:100%;}
+        * {box-sizing: border-box;}
+        div.video {height: 84%; overflow: auto; display: flex; justify-content: center;}
+        div.title {height: 10%; overflow: auto; text-align: center;}
+        img {style: width:{{w}}px;height:{{h}}px; align-self: flex-start;}
+        .column1 { float: left; width: 70%; padding: 10px; }
+        .column2 { float: left; width: 30%; padding: 10px; text-align: center;}
+        .row:after {content: ""; display: table; clear: both;}
+    </style>
+    <title>Video Streaming Demonstration</title>
+</head>
+<body>
+    <div class="title">
+        <h2>Face Recognition</h2>
+    </div>
+    <div class="row">
+        <div class="column1" style="background-color:#aaa;">
+            <h2>Column 2</h2>
+            <div class="video">
+                <img src="{{ url_for('video_feed') }}">
+            </div>
+        </div>
+        <div class="column2">
+            <h2>Atencion!</h2>
+            <p>Presione boton <b>Start</b> para comenzar registro</p>
+            <button id = "timerButton" onclick = "myTimer()">Start</button>
+            <p id="texto"></p>
+            <p id="tiempo"></p>
+        </div>
+    </div>
+    <script src="javascript.js"></script>
+</body>
+</html>

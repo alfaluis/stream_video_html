@@ -5,7 +5,7 @@ from flask import Flask, render_template, Response
 import cv2
 import utils
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 HEIGHT = 240
 WIDTH = 320
 

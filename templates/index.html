@@ -1,5 +1,11 @@
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='javascript.js')}}"></script>
     <style>
         body {height:100%;}
         * {box-sizing: border-box;}
@@ -13,24 +19,37 @@
     <title>Video Streaming Demonstration</title>
 </head>
 <body>
-    <div class="title">
-        <h2>Face Recognition</h2>
-    </div>
-    <div class="row">
-        <div class="column1" style="background-color:#aaa;">
-            <h2>Column 2</h2>
-            <div class="video">
-                <img src="{{ url_for('video_feed') }}">
+    <div class="container-fluid">
+        <div class="title">
+            <h2>Face Recognition</h2>
+        </div>
+        <div class="row">
+            <div class="column1" style="background-color:#aaa;">
+                <h2>Column 2</h2>
+                <div class="video">
+                    <img src="{{ url_for('video_feed') }}">
+                </div>
+            </div>
+            <div class="column2">
+                <h2>Atencion!</h2>
+                <p>Presione boton <b>Start</b> para comenzar registro</p>
+                <form>
+                    <div class="form-group">
+                        <label for="usr">Nombre:</label>
+                        <input id="name" type="text" class="form-control" id="usr">
+                    </div>
+                    <div class="form-group">
+                        <label for="pwd">Piso:</label>
+                        <input id="floor" type="text" class="form-control" id="pwd">
+                    </div>
+                </form>
+                <div class="form-group">
+                    <button onclick="activateCountDown()">Start</button>
+                </div>
+                <p id="texto"></p>
+                <p id="tiempo"></p>
             </div>
         </div>
-        <div class="column2">
-            <h2>Atencion!</h2>
-            <p>Presione boton <b>Start</b> para comenzar registro</p>
-            <button id = "timerButton" onclick = "myTimer()">Start</button>
-            <p id="texto"></p>
-            <p id="tiempo"></p>
-        </div>
     </div>
-    <script type="text/javascript" src="{{ url_for('static', filename='javascript.js')}}"></script>
 </body>
 </html>

@@ -6,14 +6,20 @@ from flask import Flask, render_template, Response, request
 import cv2
 import utils
 import shutil
+from train_detection_model import train_person_group
+
+# video_streaming_flask.py -k 298b3b2660164139b5b0be02d2c8c219 -sn face-api-dev
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 HEIGHT = 240
 WIDTH = 320
+GROUP_ID = 'Building_1_id'
+GROUP_NAME = 'Building_1'
 start_take_photo = False
 start_time = 0
 count_img = 0
 folder_name = ''
+folder_path = ''
 root = os.path.join(os.getcwd(), 'data')
 
 
@@ -29,34 +35,31 @@ def create_folder(path_to_create):
 
 
 def gen():
-    global start_take_photo, count_img, start_time, folder_name
+    global start_take_photo, count_img, start_time, folder_name, folder_path
     while True:
         ret, frame = vid.read()
         img = cv2.imencode('.jpg', frame)[1].tobytes()
 
         if start_take_photo:
-            create_folder(os.path.join(root, folder_name))
+            if count_img == 0:
+                folder_path = os.path.join(root, folder_name)
+                create_folder(folder_path)
 
-            if time.time() - start_time > 3:
+            if (time.time() - start_time > 3) or (count_img >= 15):
                 start_take_photo = False
-            print('taking pictures')
-            cv2.imwrite(os.path.join(root, folder_name, 'img_{}.jpg'.format(count_img)), frame)
-            count_img += 1
+                print('Stop Taking photos')
+                train_person_group(key=KEY, endpoint=ENDPOINT, group_id=GROUP_ID, group_name=GROUP_NAME,
+                                   path_folder=folder_path, person_group_name=folder_name)
+            else:
+                print('taking pictures')
+                cv2.imwrite(os.path.join(root, folder_name, 'img_{}.jpg'.format(count_img)), frame)
+                count_img += 1
         else:
             start_time = time.time()
             count_img = 0
 
-        detected_faces = utils.detect_face_stream(endpoint=ENDPOINT, key=KEY, image=img)
-        print('Image num face detected {}'.format(detected_faces))
-        color = (255, 0, 0)
-        thickness = 2
-        for face in detected_faces:
-            print(face)
-            frame = cv2.rectangle(frame, *utils.get_rectangle(face), color, thickness)
-        img_send = cv2.imencode('.jpg', frame)[1].tobytes()
-        time.sleep(1)
         yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + img_send + b'\r\n')
+               b'Content-Type: image/jpeg\r\n\r\n' + img + b'\r\n')
 
 
 @app.route('/video_feed')

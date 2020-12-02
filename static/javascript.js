@@ -1,4 +1,4 @@
-var cTime = 3;
+var cTime = 0;
 var takePic = 3;
 var startProcess = false;
 var myVar;
@@ -17,7 +17,7 @@ function postMessage(){
 }
 
 function activateCountDown(){
-    if (document.getElementById("name").value.length == 0 & document.getElementById("floor").value.length == 0){
+    if (document.getElementById("name").value.length == 0 | document.getElementById("floor").value.length == 0){
         alert("Nombre no puede estar vacia");
     }
     else{
@@ -29,14 +29,17 @@ function activateCountDown(){
 function myTimer2() {
     var d = new Date();
     var t = d.toLocaleTimeString();
-    document.getElementById("tiempo").innerHTML = Math.round((d - startTime) / 1000);
+    document.getElementById("texto").innerHTML = "El Proceso comenzara a tomar fotos en: ";
+    document.getElementById("tiempo").innerHTML = Math.round(3 - (d - startTime) / 1000);
     if (postMess == true) {
         postMess = false;
         timeoutID = setTimeout(postMessage, 3000);
     }
 
     if (Math.abs((startTime - d) / 1000) >= 3){
-  	    document.getElementById("tiempo").innerHTML = "Taking Images...";
+  	    document.getElementById("texto").innerHTML = "Tomando fotos... Tiempo restamte:";
+  	    document.getElementById("tiempo").innerHTML = Math.round(3 - (d - startTime) / 1000);
         startTime = new Date();
     }
 }
+

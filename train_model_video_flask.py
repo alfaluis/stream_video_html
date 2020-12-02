@@ -6,7 +6,7 @@ from flask import Flask, render_template, Response, request
 import cv2
 import utils
 import shutil
-from train_detection_model import train_person_group
+from train_and_detect import train_person_group
 
 # video_streaming_flask.py -k 298b3b2660164139b5b0be02d2c8c219 -sn face-api-dev
 

@@ -49,11 +49,24 @@ def identify_from_video(endpoint, key, group_id, frame):
     detected_faces = utils.detect_face_stream(endpoint=endpoint, key=key, image=img, face_attributes=attributes,
                                               recognition_model='recognition_03')
 
+    print('detected faces:', type(detected_faces))
     print(detected_faces)
     # ADD CONDITIONAL, IF DETECTED IS EMPTY END FUNCTION
+    if len(detected_faces) == 0:
+        return frame
+    if isinstance(detected_faces, dict):
+        try:
+            err_code = detected_faces['error']['code']
+            if int(err_code) == 429:
+                time.sleep(10)
+        except TypeError:
+            print('error in dict keys, please check: error and code values')
+        except ValueError:
+            print('Unable to convert error code to integer')
+        finally:
+            return frame
     faces_ids = [f['faceId'] for f in detected_faces]
     identify_output = utils.identify_faces(endpoint=endpoint, key=key, group_id=group_id, face_id_list=faces_ids)
-    print(identify_output)
     thickness = 2
     for person in identify_output:
         print(type(person['faceId']))
@@ -63,6 +76,7 @@ def identify_from_video(endpoint, key, group_id, frame):
             candidate = person['candidates'][0]
             print('Identified in {} with a confidence: {}.'.format(person['faceId'], candidate['confidence']))
             person_info = utils.get_person_info(endpoint, key, group_id, candidate['personId'])
+            print('Person INFO:', person_info)
             print('Name Group person identified: {0}'.format(person_info['name']))
             color = (0, 255, 0)
             frame = cv2.rectangle(frame, *utils.get_rectangle(face), color, thickness)

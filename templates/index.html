@@ -1,49 +1,40 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='javascript.js')}}"></script>
-    <style>
-        body {height:100%;}
-        * {box-sizing: border-box;}
-        div.video {height: 84%; overflow: auto; display: flex; justify-content: center;}
-        div.title {height: 10%; overflow: auto; text-align: center;}
-        img {style: width:{{w}}px;height:{{h}}px; align-self: flex-start;}
-        .column1 { float: left; width: 70%; padding: 10px; }
-        .column2 { float: left; width: 30%; padding: 10px; text-align: center;}
-        .row:after {content: ""; display: table; clear: both;}
-    </style>
+
     <title>Video Streaming Demonstration</title>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="title">
-            <h2>Face Recognition</h2>
-        </div>
+    <div class="container-fluid p-3 my-1 bg-dark text-white">
+        <h2>Face Recognition</h2>
+    </div>
+    <div class="container-fluid p-3 my-1">
         <div class="row">
-            <div class="column1" style="background-color:#aaa;">
-                <h2>Camera</h2>
-                <div class="video">
-                    <img src="{{ url_for('video_feed') }}">
-                </div>
+            <!-- column with video streaming -->
+            <div class="col-sm-8 p-3" style="background-color:#aaa;">
+                <img src="{{ url_for('video_feed') }}" class="rounded img-fluid mx-auto d-block">
+<!--            <img src="mainPicture.PNG" class="img-fluid mx-auto d-block">-->
             </div>
-            <div class="column2">
-                <h2>Atencion!</h2>
-                <p>Presione boton <b>Start</b> para comenzar registro</p>
+            <!-- column with form and gral. info -->
+            <div class="col-sm-4">
+                <h2  class="font-weight-bold text-center">Atencion!</h2>
+                <p class="text-center">Presione boton <b>Start</b> para comenzar registro</p>
                 <form id="formUser">
                     <div class="form-group">
                         <label for="name">Nombre:</label>
-                        <input id="name" type="text" class="form-control">
+                        <input id="name" type="text" placeholder="Enter your name" class="form-control">
                     </div>
                     <div class="form-group">
                         <label for="floor">Piso:</label>
-                        <input id="floor" type="text" class="form-control">
+                        <input id="floor" type="text" placeholder="Enter your floor" class="form-control">
                     </div>
                     <div class="form-group">
-                        <button id="btnStart" onclick="activateCountDown()">Start</button>
+                        <button id="btnStart" class="btn btn-outline-primary btn-block" onclick="activateCountDown()">Start</button>
                     </div>
                 </form>
                 <p id="texto"></p>

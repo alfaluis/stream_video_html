@@ -3,17 +3,15 @@ import time
 
 from flask import Flask, render_template, Response, jsonify
 import cv2
-import utils
 from train_and_detect import identify_from_video
 
-# identify_video_flask.py -k 298b3b2660164139b5b0be02d2c8c219 -sn face-api-dev
 
 app = Flask(__name__)
 HEIGHT = 240
 WIDTH = 320
 GROUP_ID = 'building-1-id'
 GROUP_NAME = 'building-1'
-person_name = 'None Detected'
+person_name = None
 flag = False
 
 
@@ -24,7 +22,7 @@ def gen():
         frame, person_name = identify_from_video(endpoint=ENDPOINT, key=KEY, group_id=GROUP_ID, frame=frame)
         img_send = cv2.imencode('.jpg', frame)[1].tobytes()
 
-        time.sleep(1)
+        # time.sleep(0.5)
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + img_send + b'\r\n')
 
@@ -42,7 +40,13 @@ def video_feed():
 
 @app.route('/detection', methods=['GET'])
 def testfn():
-    message = {'PersonName': 'Luis'}
+    global person_name
+    while True:
+        if person_name is not None:
+            aux = person_name.copy()
+            message = {'PersonName': aux[0]['name'], 'Confidence': aux[0]['confidence']}
+            person_name = None
+            break
     return jsonify(message)  # serialize and use JSON headers
 
 
@@ -66,4 +70,3 @@ if __name__ == '__main__':
 
     # release camera
     vid.release()
-

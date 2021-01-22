@@ -1,21 +1,16 @@
-function openModal() {
+window.addEventListener("load",  doRecursiveRequest);
+
+function openModal(person=null) {
+    console.log("Passed Param:")
+    console.log(person)
     $("#myModal").modal("toggle");
+    if(person != null) {
+        document.getElementById("modalBody").innerHTML = person + "!";
+    }
+    doRecursiveRequest();
 }
 
-
-function detectPerson() {
-    fetch('/detection', {method: "GET"})
-        .then(function(response) {return response.json();})
-        .then(function (text) {
-            console.log('GET response:');
-            console.log(text);
-            openModal();
-            setTimeout(openModal, 3000);
-            })
-        .catch(err => console.log(err));
-}
-
-async function detectPerson2() {
+async function detectPerson2(url) {
     try{
         let response = await fetch('/detection', {method: "GET"});
         let data = await response.json();
@@ -30,7 +25,37 @@ function clickResp(){
     .then(text => {
         console.log('GET response:');
         console.log(text);
-        openModal();
+        openModal("bla bla");
         setTimeout(openModal, 3000);
     })
+}
+
+function status(response) {
+    if (response.ok) {
+        return response;
+    } else {
+        return doRecursiveRequest();
+    }
+}
+
+function doRecursiveRequest(){
+    fetch('/detection', {method: "GET"})
+        .then(status)
+        .then(function(resJson) {return resJson.json();})
+        .then(text => {
+            console.log('GET response:');
+            console.log(text);
+            console.log(text.PersonName);
+            if(text.PersonName != null){
+                openModal(text.PersonName);
+                setTimeout(openModal, 3000);
+            } else{
+                doRecursiveRequest();
+            }
+        })
+        .catch(err => {
+            console.log('Error log:');
+            console.log(err);
+            doRecursiveRequest();
+        })
 }

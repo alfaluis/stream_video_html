@@ -115,6 +115,18 @@ def detect_face(endpoint, key, frame):
 
 
 def identify_and_process(detected_faces, endpoint, key, group_id):
+    """Process detected faces and check if there are in the system database
+
+    @param detected_faces: Information about detected faces
+    @type detected_faces: List(dict)
+    @param endpoint: Endpoint Azure Service
+    @type endpoint: str
+    @param key: key connection of Azure Service
+    @type key: str
+    @param group_id: unique identify of the group or database
+    @type group_id: str
+    @return: List(dict) with info about identified people or None
+    """
     identify_response = list()
 
     # Face Ids to search in the person group (10 max)
@@ -157,7 +169,7 @@ def identify_from_video(endpoint, key, group_id, frame):
     @type endpoint: str
     @param key: key connection of Azure Service
     @type key: str
-    @param group_id:
+    @param group_id: unique identify of the group or database
     @type group_id: str
     @param frame: Frame Image
     @type frame: numpy.ndarray

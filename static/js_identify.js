@@ -1,5 +1,7 @@
+// Activate recursive request once the page load
 window.addEventListener("load",  doRecursiveRequest);
 
+// Function to open Modal Object passing as parameter the name of the person identified
 function openModal(person=null) {
     console.log("Passed Param:")
     console.log(person)
@@ -10,26 +12,7 @@ function openModal(person=null) {
     doRecursiveRequest();
 }
 
-async function detectPerson2(url) {
-    try{
-        let response = await fetch('/detection', {method: "GET"});
-        let data = await response.json();
-        return data
-     } catch(err) {
-        throw err
-     }
-}
-
-function clickResp(){
-    detectPerson2()
-    .then(text => {
-        console.log('GET response:');
-        console.log(text);
-        openModal("bla bla");
-        setTimeout(openModal, 3000);
-    })
-}
-
+// Function to check a good response from the server
 function status(response) {
     if (response.ok) {
         return response;
@@ -38,6 +21,7 @@ function status(response) {
     }
 }
 
+// Main function to continue asking for people identified
 function doRecursiveRequest(){
     fetch('/detection', {method: "GET"})
         .then(status)
